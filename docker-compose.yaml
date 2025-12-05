@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pki-2fa-app
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=UTC
+    volumes:
+      - seed-data:/data
+      - cron-output:/cron
+      # Local dev: mount your key files read-only (optional)
+      - ./student_private.pem:/app/student_private.pem:ro
+      - ./student_public.pem:/app/student_public.pem:ro
+      - ./instructor_public.pem:/app/instructor_public.pem:ro
+    restart: unless-stopped
+
+volumes:
+  seed-data:
+  cron-output:
